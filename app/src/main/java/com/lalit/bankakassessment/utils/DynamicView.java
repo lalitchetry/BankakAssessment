@@ -32,7 +32,7 @@ public class DynamicView {
     }
 
     @RequiresApi(api = Build.VERSION_CODES.M)
-    public EditText editText(Context context, String hint, String regex, String type_name){
+    public EditText editText(Context context, String hint, String regex){
         final ViewGroup.LayoutParams layoutParams = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         final EditText editText = new EditText(context);
         editText.setLayoutParams(layoutParams);

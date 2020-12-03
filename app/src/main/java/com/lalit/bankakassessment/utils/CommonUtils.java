@@ -7,6 +7,7 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.text.TextUtils;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -89,23 +90,24 @@ public class CommonUtils {
     public String validate(EditText editText, String regex) {
         String message = "";
         String result = editText.getText().toString().trim();
-        if (result.isEmpty()) {
+        if (TextUtils.isEmpty(result)) {
             message = "Please fill all data";
             return message;
-        }
+        } else {
+            if (!TextUtils.isEmpty(regex)) {
+                regex = regex.replace("/", "").replace("s", "")
+                        .replace("[]", "\\[\\]").replace("d", "\\d");
+                try {
+                    Pattern pattern = Pattern.compile(regex, Pattern.CASE_INSENSITIVE);
+                    Matcher matcher = pattern.matcher(result);
+                    if (!matcher.matches()) {
+                        message = "Please provide correct format";
+                        return message;
+                    }
 
-        if (!regex.isEmpty()) {
-            regex = regex.replace("/", "").replace("s", "")
-                    .replace("[]", "\\[\\]").replace("d", "\\d");
-            try {
-                Pattern pattern = Pattern.compile(regex, Pattern.CASE_INSENSITIVE);
-                Matcher matcher = pattern.matcher(result);
-                if (!matcher.matches()) {
-                    message = "Please provide correct format";
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
-
-            } catch (Exception e) {
-                e.printStackTrace();
             }
         }
         return message;
