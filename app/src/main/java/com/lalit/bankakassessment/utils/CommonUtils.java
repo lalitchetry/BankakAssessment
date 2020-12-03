@@ -13,6 +13,7 @@ import android.net.NetworkInfo;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.EditText;
 
 import androidx.core.app.ActivityCompat;
 
@@ -44,23 +45,6 @@ public class CommonUtils {
         return false;
     }
 
-    //checks if the location is enabled
-    public static boolean isLocationEnabled(Context context) {
-        LocationManager locationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
-        return locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
-    }
-
-    //checks for location permission
-    public boolean checkPermission(Context context) {
-        return ((ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) &&
-                (ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED));
-    }
-
-    //asks for location permission
-    public void askPermission(Activity activity, int REQUEST_CODE_LOCATION_PERMISSION) {
-        ActivityCompat.requestPermissions(activity, new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION}, REQUEST_CODE_LOCATION_PERMISSION);
-    }
-
     //show simple message print for bottom of screen
     public void snackbar(View coordinatorLayout, String message) {
         Snackbar snackbar = Snackbar
@@ -68,7 +52,7 @@ public class CommonUtils {
         snackbar.show();
     }
 
-    //create custome loader
+    //create custom loader
     public Dialog createCustomLoader(Context mContext, boolean isCancelable) {
         final Dialog dialog = new Dialog(mContext);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -102,4 +86,14 @@ public class CommonUtils {
         }
     }
 
+    //email validation
+    public boolean validate(EditText email, String regex) {
+        boolean isValidated;
+        String result = email.getText().toString().trim();
+        if (result.matches(regex))
+            isValidated = true;
+        else
+            isValidated = false;
+        return isValidated;
+    }
 }

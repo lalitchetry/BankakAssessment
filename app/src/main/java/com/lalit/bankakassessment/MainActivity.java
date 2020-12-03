@@ -3,14 +3,11 @@ package com.lalit.bankakassessment;
 import android.app.Dialog;
 import android.os.Build;
 import android.os.Bundle;
-import android.widget.Toast;
 
 import androidx.annotation.RequiresApi;
 import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.lifecycle.ViewModelProviders;
 
-import com.jaredrummler.materialspinner.MaterialSpinner;
 import com.lalit.bankakassessment.databinding.ActivityMainBinding;
 import com.lalit.bankakassessment.model.TypeResponseModel;
 import com.lalit.bankakassessment.utils.BaseActivity;
@@ -89,6 +86,8 @@ public class MainActivity extends BaseActivity {
                 setData(dataList);
             }
         });
+
+        
     }
 
     @RequiresApi(api = Build.VERSION_CODES.M)
