@@ -3,11 +3,16 @@ package com.lalit.bankakassessment;
 import android.app.Dialog;
 import android.os.Build;
 import android.os.Bundle;
+import android.text.TextUtils;
+import android.util.Log;
+import android.view.View;
+import android.widget.EditText;
 
 import androidx.annotation.RequiresApi;
 import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.jaredrummler.materialspinner.MaterialSpinner;
 import com.lalit.bankakassessment.databinding.ActivityMainBinding;
 import com.lalit.bankakassessment.model.TypeResponseModel;
 import com.lalit.bankakassessment.utils.BaseActivity;
@@ -87,7 +92,26 @@ public class MainActivity extends BaseActivity {
             }
         });
 
-        
+
+        binding.btnSubmit.setOnClickListener(view -> {
+            submitValues();
+        });
+
+    }
+
+
+    private void submitValues() {
+        int count = binding.llDynamicLayout.getChildCount();
+        for (int i = 0; i < count; i++) {
+            View view = binding.llDynamicLayout.getChildAt(i);
+            if (view instanceof EditText) {
+                String validatedString = commonUtils.validate((EditText) view, (String) view.getTag());
+                if (!validatedString.isEmpty())
+                    commonUtils.snackbar(binding.rllayout, validatedString);
+                else
+                    commonUtils.snackbar(binding.rllayout, "You can now proceed");
+            }
+        }
     }
 
     @RequiresApi(api = Build.VERSION_CODES.M)
@@ -98,7 +122,7 @@ public class MainActivity extends BaseActivity {
             switch (dataList.getResult().getFields().get(i).getUiType().getType()) {
                 case TYPE_TEXT:
                     binding.llDynamicLayout.addView(dynamicView.textView(this, dataList.getResult().getFields().get(i).getPlaceholder()));
-                    binding.llDynamicLayout.addView(dynamicView.editText(this, dataList.getResult().getFields().get(i).getHintText()));
+                    binding.llDynamicLayout.addView(dynamicView.editText(this, dataList.getResult().getFields().get(i).getHintText(), dataList.getResult().getFields().get(i).getRegex(), dataList.getResult().getFields().get(i).getName()));
                     break;
                 case TYPE_DROPDOWN:
                     for (int j = 0; j < dataList.getResult().getFields().get(i).getUiType().getValues().size(); j++) {
@@ -108,7 +132,6 @@ public class MainActivity extends BaseActivity {
                     binding.llDynamicLayout.addView(dynamicView.materialSpinner(this, spinnerArray));
                     break;
             }
-
         }
     }
 
@@ -119,4 +142,6 @@ public class MainActivity extends BaseActivity {
     private void showInProgress() {
         commonUtils.showCustomDialog(dialog, this);
     }
+
+
 }

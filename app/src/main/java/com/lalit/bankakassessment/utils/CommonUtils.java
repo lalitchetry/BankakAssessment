@@ -1,13 +1,10 @@
 package com.lalit.bankakassessment.utils;
 
-import android.Manifest;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
-import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
-import android.location.LocationManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.view.View;
@@ -15,10 +12,11 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.EditText;
 
-import androidx.core.app.ActivityCompat;
-
 import com.google.android.material.snackbar.Snackbar;
 import com.lalit.bankakassessment.R;
+
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class CommonUtils {
 
@@ -86,14 +84,30 @@ public class CommonUtils {
         }
     }
 
-    //email validation
-    public boolean validate(EditText email, String regex) {
-        boolean isValidated;
-        String result = email.getText().toString().trim();
-        if (result.matches(regex))
-            isValidated = true;
-        else
-            isValidated = false;
-        return isValidated;
+
+    //validation of all the empty field and regex
+    public String validate(EditText editText, String regex) {
+        String message = "";
+        String result = editText.getText().toString().trim();
+        if (result.isEmpty()) {
+            message = "Please fill all data";
+            return message;
+        }
+
+        if (!regex.isEmpty()) {
+            regex = regex.replace("/", "").replace("s", "")
+                    .replace("[]", "\\[\\]").replace("d", "\\d");
+            try {
+                Pattern pattern = Pattern.compile(regex, Pattern.CASE_INSENSITIVE);
+                Matcher matcher = pattern.matcher(result);
+                if (!matcher.matches()) {
+                    message = "Please provide correct format";
+                }
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        return message;
     }
 }
